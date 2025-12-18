@@ -22,7 +22,7 @@ export async function logSavings(input: unknown): Promise<LogsSavingsResult> {
 
     const { error } = await supabase
         .from("savings_log")
-        .insert([{ amount, created_at: new Date().toISOString() }])
+        .insert([{ amount: Number(amount), created_at: new Date().toISOString() }])
 
     if (error) {
         console.error("logSavings failed:", error)

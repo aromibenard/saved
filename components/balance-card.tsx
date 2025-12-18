@@ -1,27 +1,56 @@
-'use client'
+
+"use client"
 
 import { motion } from "framer-motion"
-import { Card, CardContent } from "./ui/8bit/card"
+import { Card, CardContent } from "@/components/ui/8bit/card"
+import { useAnimatedNumber } from "@/hooks/useAnimatedNumber"
 
+interface BalanceCardProps {
+  balance: number
+  currency?: string
+  label?: string
+  sublabel?: string
+  streak?: number
+  bestDay?: number
+  monthTotal?: number
+}
 
 export default function BalanceCard({
-  balance = 125430,
+  balance,
   currency = "KES",
   label = "Total Savings",
   sublabel = "Updated today",
-}) {
+  streak = 0,
+  bestDay = 0,
+  monthTotal = 0,
+}: BalanceCardProps) {
+  const animatedBalance = useAnimatedNumber(balance)
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
       className="w-full max-w-md"
     >
       <Card
-        className="relative overflow-hidden rounded-2xl border border-border/40 
-        bg-gradient-to-br from-background via-background to-muted 
-        shadow-xl"
+        className="
+          relative overflow-hidden rounded-2xl
+          border border-border/40
+          bg-gradient-to-br from-background via-background to-muted
+          shadow-xl
+        "
       >
+        {/* 🔥 Pulse glow — remounts on balance change */}
+        <span
+          key={balance}
+          className="
+            pointer-events-none absolute inset-0
+            animate-pulse
+            bg-primary/10
+          "
+        />
+
         {/* Arcade glow */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
@@ -42,8 +71,8 @@ export default function BalanceCard({
           {/* Balance */}
           <div className="space-y-1">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold tracking-tight text-foreground">
-                {balance.toLocaleString()}
+              <span className="text-3xl font-bold tracking-tight tabular-nums">
+                {animatedBalance.toLocaleString()}
               </span>
               <span className="text-sm font-semibold text-muted-foreground">
                 {currency}
@@ -52,26 +81,24 @@ export default function BalanceCard({
             <p className="text-xs text-muted-foreground">{sublabel}</p>
           </div>
 
-          {/* Divider */}
           <div className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent" />
 
-          {/* Footer stats */}
           <div className="grid grid-cols-3 gap-3 text-xs">
-            <div className="rounded-lg border border-border/50 bg-muted/40 p-2 text-center">
-              <p className="text-muted-foreground">Streak</p>
-              <p className="font-semibold text-foreground">🔥 7d</p>
-            </div>
-            <div className="rounded-lg border border-border/50 bg-muted/40 p-2 text-center">
-              <p className="text-muted-foreground">Best Day</p>
-              <p className="font-semibold text-foreground">12,000</p>
-            </div>
-            <div className="rounded-lg border border-border/50 bg-muted/40 p-2 text-center">
-              <p className="text-muted-foreground">This Month</p>
-              <p className="font-semibold text-foreground">45,300</p>
-            </div>
+            <Stat label="Streak" value={`🔥 ${streak}d`} />
+            <Stat label="Best Day" value={bestDay.toLocaleString()} />
+            <Stat label="This Month" value={monthTotal.toLocaleString()} />
           </div>
         </CardContent>
       </Card>
     </motion.div>
+  )
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-border/50 bg-muted/40 p-2 text-center">
+      <p className="text-muted-foreground">{label}</p>
+      <p className="font-semibold text-foreground">{value}</p>
+    </div>
   )
 }

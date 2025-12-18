@@ -16,7 +16,7 @@ export default function SavingsCard({
     onWithdraw: (amount: number) => void
     disabled?: boolean
 }) {
-    const [amount, setAmount] = useState(0)
+    const [amount, setAmount] = useState("")
 
     return (
         <motion.div

@@ -4,6 +4,7 @@
 import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/8bit/card"
 import { useAnimatedNumber } from "@/hooks/useAnimatedNumber"
+import { Streak } from "./streak"
 
 interface BalanceCardProps {
   balance: number
@@ -13,6 +14,7 @@ interface BalanceCardProps {
   streak?: number
   bestDay?: number
   monthTotal?: number
+  streakPromise: Promise<number>
 }
 
 export default function BalanceCard({
@@ -20,9 +22,9 @@ export default function BalanceCard({
   currency = "KES",
   label = "Total Savings",
   sublabel = "Updated today",
-  streak = 0,
   bestDay = 0,
   monthTotal = 0,
+  streakPromise
 }: BalanceCardProps) {
   const animatedBalance = useAnimatedNumber(balance)
 
@@ -37,7 +39,7 @@ export default function BalanceCard({
         className="
           relative overflow-hidden rounded-2xl
           border border-border/40
-          bg-gradient-to-br from-background via-background to-muted
+          bg-linear-to-br from-background via-background to-muted
           shadow-xl
         "
       >
@@ -46,7 +48,6 @@ export default function BalanceCard({
           key={balance}
           className="
             pointer-events-none absolute inset-0
-            animate-pulse
             bg-primary/10
           "
         />
@@ -84,7 +85,7 @@ export default function BalanceCard({
           <div className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent" />
 
           <div className="grid grid-cols-3 gap-3 text-xs">
-            <Stat label="Streak" value={`🔥 ${streak}d`} />
+            <Streak  streakPromise={streakPromise} />
             <Stat label="Best Day" value={bestDay.toLocaleString()} />
             <Stat label="This Month" value={monthTotal.toLocaleString()} />
           </div>

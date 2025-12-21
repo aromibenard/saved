@@ -27,7 +27,7 @@ export default function SavingsCard({
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="w-full max-w-md"
     >
-      <Card className="relative overflow-hidden rounded-2xl border border-border/40 bg-gradient-to-br from-background via-background to-muted shadow-lg">
+      <Card className="relative overflow-hidden rounded-2xl border border-border/40 bg-linear-to-br from-background via-background to-muted shadow-lg">
         <CardContent className="flex flex-col gap-5 p-5 sm:p-6">
 
           {/* Header */}
